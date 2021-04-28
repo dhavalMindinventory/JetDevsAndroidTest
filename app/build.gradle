@@ -1,0 +1,111 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-parcelize'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'dagger.hilt.android.plugin'
+apply from: "${rootProject.projectDir}/flavors.gradle"
+apply plugin: 'kotlinx-serialization'
+apply plugin: "androidx.navigation.safeargs.kotlin"
+
+android {
+    compileSdkVersion Release.compileSdkVersion
+    defaultConfig {
+        applicationId ApplicationId.id
+        minSdkVersion Release.minSdkVersion
+        targetSdkVersion Release.targetSdkVersion
+        versionCode Release.versionCode
+        versionName Release.versionName
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField 'int', 'DATABASE_VERSION', '1'
+        buildConfigField 'int', 'SECURITY_GUARD_VERSION', '1'
+        buildConfigField 'String', 'DATABASE_NAME', '"app_database"'
+        multiDexEnabled true
+        vectorDrawables.useSupportLibrary = true
+    }
+
+    dataBinding{
+        enabled true
+    }
+
+    signingConfigs {
+        debug
+        release
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    with flavorConfig
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+        kotlinOptions {
+            jvmTarget = "1.8"
+        }
+    }
+}
+
+
+dependencies {
+    //support
+    implementation(Dependencies.kotlin)
+    implementation(Support.appCompat)
+    implementation(Support.core)
+    implementation(Support.constraintLayout)
+    implementation(Support.materialComponent)
+    implementation(Support.legacySupport)
+    implementation(Support.lifeCycleExtensions)
+
+    //navigation
+    api(Arch.navigationFragment)
+    api(Arch.navigationKtx)
+
+    //Hilt-dagger
+    implementation(HiltDagger.hiltAndroid)
+    kapt(HiltDagger.hiltAndroidCompiler)
+    implementation(HiltDagger.hiltViewModel)
+    kapt(HiltDagger.hiltAndroidx)
+
+    //unittest
+    testImplementation(TestLibs.junit)
+    androidTestImplementation(TestLibs.testRunner)
+
+    //Logger
+    implementation(Log.timber)
+
+    //CircularImageView
+    implementation(CircularImageView.circularImageView)
+
+    //Image loading
+    implementation(Image.glide)
+    kapt(Image.glideCompiler)
+
+    //network
+    implementation(Network.kotlinSerialization)
+    implementation(Network.retrofit)
+    implementation(Network.kotlinxConverter)
+    implementation(Network.okHttpLogging)
+
+    debugImplementation(Network.chuckOkHttpDebug)
+    releaseImplementation(Network.chuckOkHttpRelease)
+
+    // circle imageview
+    implementation(CircularImageView.circularImageView)
+
+    // Room
+    api(Database.room)
+    kapt(Database.roomCompiler)
+    api(Database.roomKtx)
+}

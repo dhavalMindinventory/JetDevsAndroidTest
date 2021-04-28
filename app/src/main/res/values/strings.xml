@@ -1,0 +1,18 @@
+<resources>
+
+    <!--login-->
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="msg_invalid_email">This is a invalid email.</string>
+    <string name="enter_email">Please enter Email</string>
+    <string name="enter_password">Please enter Password</string>
+    <string name="msg_password">Passwords require at least 1 uppercase, 1 lowercase, and 1 number.</string>
+    <string name="msg_login_success">Login Successfully.</string>
+
+
+    <!--common-->
+    <string name="something_went_wrong">Something went wrong</string>
+    <string name="no_internet">No internet</string>
+
+</resources>
